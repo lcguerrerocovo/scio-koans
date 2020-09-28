@@ -7,7 +7,6 @@ import scio.koans.shared._
  * Merge 2 `Map[String, Set[Int]]`s.
  */
 class K03_MergeMaps1 extends JmhKoan {
-  ImNotDone
 
   val map1: Map[String, Set[Int]] = Map(
     "a" -> (1 to 20).toSet,
@@ -31,6 +30,9 @@ class K03_MergeMaps1 extends JmhKoan {
       .toMap
 
   // Why is this faster than `baseline`?
+  // A: In the baseline logic, getOrElse is used to retrieve the value in the map, this adds a pattern
+  //    matching expression which effectively doubles the efficiency of key retrieval
+  //    For v1 we avoid this by only merging keys that we know exist in both maps
   @Benchmark def v1: Map[String, Set[Int]] = {
     val commonKeys = map1.keySet intersect map2.keySet
     val common = commonKeys.map(k => k -> (map1(k) ++ map2(k))).toMap
@@ -40,7 +42,7 @@ class K03_MergeMaps1 extends JmhKoan {
   // Hint: if `k` exists in both `m1 ++ m2`, value in `m2` wins
   // How much faster is this version?
   @Benchmark def v2: Map[String, Set[Int]] =
-    map1 ++ map2.map(???)
+    map1 ++ map2.map{ case (k,v) => k -> (v ++ map1.getOrElse(k,Set.empty)) }
 
   verifyResults()
   verifySpeedup(Speedup.Times(2))
