@@ -22,7 +22,8 @@ val commonSettings = Seq(
     "-deprecation",
     "-feature",
     "-unchecked",
-    "-language:higherKinds"
+    "-language:higherKinds",
+    "-Xmacro-settings:show-coder-fallback=true"
   ),
   Test / classLoaderLayeringStrategy := ClassLoaderLayeringStrategy.Flat,
   allKoans := {
