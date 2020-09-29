@@ -9,14 +9,16 @@ import org.openjdk.jmh.annotations._
  * https://github.com/ktoso/sbt-jmh
  */
 class K00_Jmh extends JmhKoan {
-  ImNotDone // FIXME: delete this to move on to the next one
 
   @Benchmark def baseline: Int = {
     Thread.sleep(10)
     (1 to 100).sum
   }
 
-  @Benchmark def v1: Int = ??? // FIXME: implement this to speed up the benchmark
+  @Benchmark def v1: Int = {
+    Thread.sleep(10)
+    (1 to 10).sum
+  }
 
   // Add as many alternatives as you like
   // @Benchmark def v2: Int = ???
