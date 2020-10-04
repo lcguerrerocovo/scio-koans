@@ -9,7 +9,6 @@ import scio.koans.shared._
  * Fix the `NullPointerException`.
  */
 class K01_LocalDate extends PipelineKoan {
-  ImNotDone
 
   val events: Seq[(String, String)] = Seq(
     ("2020-01-01", "a"),
@@ -21,11 +20,11 @@ class K01_LocalDate extends PipelineKoan {
     ("BAD DATE", "x")
   )
 
-  val expected: Seq[((Int, Int), Set[String])] = Seq(
-    ((2020, 1), Set("a")),
-    ((2020, 2), Set("b", "c")),
-    ((2020, 3), Set("c", "d")),
-    (null, Set("x"))
+  val expected: Seq[(Option[(Int, Int)], Set[String])] = Seq(
+    (Some(2020, 1), Set("a")),
+    (Some(2020, 2), Set("b", "c")),
+    (Some(2020, 3), Set("c", "d")),
+    (None, Set("x"))
   )
 
   "Snippet" should "work" in {
@@ -39,9 +38,9 @@ class K01_LocalDate extends PipelineKoan {
             // Hint: avoid null by emitting something else in case of exception
             try {
               val date = LocalDate.from(formatter.parse(dateStr))
-              ((date.getYear, date.getMonth.getValue), event)
+              (Some(date.getYear, date.getMonth.getValue), event)
             } catch {
-              case _: Throwable => (null, event)
+              case _: Throwable => (None, event)
             }
         }
         .groupByKey
