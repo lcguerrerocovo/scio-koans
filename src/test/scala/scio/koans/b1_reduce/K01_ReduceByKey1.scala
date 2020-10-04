@@ -7,7 +7,6 @@ import scio.koans.shared._
  * Replace `groupByKey` with `reduceByKey`.
  */
 class K01_ReduceByKey1 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = SCollection[(String, Int)]
@@ -33,6 +32,6 @@ class K01_ReduceByKey1 extends TransformKoan {
   }
 
   test("v1") {
-    _.reduceByKey(???)
+    _.reduceByKey(_ + _)
   }
 }

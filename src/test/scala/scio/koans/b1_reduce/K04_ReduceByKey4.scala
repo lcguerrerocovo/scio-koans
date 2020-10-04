@@ -7,7 +7,6 @@ import scio.koans.shared._
  * Count distinct values by key.
  */
 class K04_ReduceByKey4 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = SCollection[(String, Long)]
@@ -34,8 +33,8 @@ class K04_ReduceByKey4 extends TransformKoan {
 
   // How does this compare with `baseline` in terms of shuffle?
   test("v1") {
-    _.mapValues(v => ?:[Set[Int]])
-      .reduceByKey(???)
-      .mapValues(???)
+    _.mapValues(Set(_))
+      .reduceByKey(_ ++ _)
+      .mapValues(_.size)
   }
 }

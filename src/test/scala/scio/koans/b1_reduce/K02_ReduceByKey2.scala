@@ -7,7 +7,6 @@ import scio.koans.shared._
  * Replace `groupByKey` with `reduceByKey`.
  */
 class K02_ReduceByKey2 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = SCollection[(String, (Int, Int))]
@@ -32,6 +31,6 @@ class K02_ReduceByKey2 extends TransformKoan {
 
   // Hint: count and sum at the same time over `(Int, Int)`
   test("v1") {
-    _.mapValues(v => ?:[(Int, Int)]).reduceByKey(???)
+    _.mapValues(v => (1, v)).reduceByKey(op = (x, y) => (x._1 + y._1, x._2 + y._2))
   }
 }

@@ -7,7 +7,6 @@ import scio.koans.shared._
  * Compute min and max values by key.
  */
 class K03_ReduceByKey3 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = SCollection[(String, (Int, Int))]
@@ -34,8 +33,10 @@ class K03_ReduceByKey3 extends TransformKoan {
 
   // Hint: `Seq(10).min = 10`, `Seq(10).max = 10`
   // How does this compare with `baseline` in terms of shuffle?
+  // less shuffle because values by key in the same machine are combined using the reduce function
+  // before being shuffled over the network
   test("v1") {
-    _.mapValues(v => ?:[(Int, Int)])
-      .reduceByKey(???)
+    _.mapValues(v => (v,v))
+      .reduceByKey(op = (x,y) => (x._1 min y._1, x._2 max y._2))
   }
 }
