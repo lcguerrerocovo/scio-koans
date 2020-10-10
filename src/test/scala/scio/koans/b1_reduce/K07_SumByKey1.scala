@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `reduceByKey` with `sumByKey`.
  */
 class K07_SumByKey1 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = (SCollection[(String, Int)], SCollection[(String, Int)], SCollection[(String, Int)])
@@ -50,8 +49,8 @@ class K07_SumByKey1 extends TransformKoan {
 
     // FIXME: implement these with `sumByKey`
     // Hint: Algebird also provides implicit `Semigroup[Max[Int]]` and `Semigroup[Set[Int]]`
-    val max: SCollection[(String, Int)] = ???
-    val distinctCount: SCollection[(String, Int)] = ???
+    val max: SCollection[(String, Int)] = input.mapValues(Max(_)).sumByKey.mapValues(_.get)
+    val distinctCount: SCollection[(String, Int)] = input.mapValues(Set(_)).sumByKey.mapValues(_.size)
 
     (min, max, distinctCount)
   }

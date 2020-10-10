@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `reduceByKey` with `sumByKey`.
  */
 class K08_SumByKey2 extends TransformKoan {
-  ImNotDone
 
   import K08_SumByKey2._
 
@@ -45,8 +44,8 @@ class K08_SumByKey2 extends TransformKoan {
   // Hint: Algebird provides implicit `Semigroup[T]` for `T = Int, Min[Int], Max[Int], Set[Int]`
   // And can derive one for tuples e.g. `Semigroup[(Int, Int, Min[Int], Max[Int], Set[Int])]`
   test("v1") {
-    _.mapValues(v => ?:[(Int, Int, Min[Int], Max[Int], Set[Int])]).sumByKey
-      .mapValues(v => ?:[Stats])
+    _.mapValues(v => (1, v, Min(v), Max(v), Set(v))).sumByKey
+      .mapValues(v => Stats(v._1, v._2, v._3.get, v._4.get, v._5.size))
   }
 }
 

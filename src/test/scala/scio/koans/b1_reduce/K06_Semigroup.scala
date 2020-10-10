@@ -6,7 +6,6 @@ import scio.koans.shared._
  * Abstract reduce binary operations with `Semigroup`s.
  */
 class K06_Semigroup extends Koan {
-  ImNotDone
 
   import K06_Semigroup._
 
