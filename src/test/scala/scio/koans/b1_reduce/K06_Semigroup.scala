@@ -35,14 +35,14 @@ class K06_Semigroup extends Koan {
   "Max semigroup" should "work" in {
     case class Max(v: Int)
     // Hint: max is the opposite of min
-    implicit val maxSemigroup: Semigroup[Max] = ???
+    implicit val maxSemigroup: Semigroup[Max] = (x, y) => Max(math.max(x.v, y.v))
     testCombine(Max(1), Max(2), Max(2))
     testCombineAllOption(Seq(Max(1), Max(2), Max(3)), Some(Max(3)))
   }
 
   "Set semigroup" should "work" in {
     implicit val setSemigroup: Semigroup[Set[Int]] = new Semigroup[Set[Int]] {
-      override def combine(x: Set[Int], y: Set[Int]): Set[Int] = ???
+      override def combine(x: Set[Int], y: Set[Int]): Set[Int] = x ++ y
 
       override def combineAllOption(xs: TraversableOnce[Set[Int]]): Option[Set[Int]] =
         if (xs.isEmpty) {
@@ -52,7 +52,7 @@ class K06_Semigroup extends Koan {
           // Use a mutable builder to reduce overhead
           val b = Set.newBuilder[Int]
           xs.foreach { x =>
-            ???
+            b ++= x
           }
           Some(b.result())
         }
