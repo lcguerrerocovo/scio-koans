@@ -6,7 +6,6 @@ import scio.koans.shared._
  * Abstract reduce binary operations with `Aggregator`s.
  */
 class K14_Aggregator extends Koan {
-  ImNotDone
 
   import K14_Aggregator._
 
@@ -24,13 +23,13 @@ class K14_Aggregator extends Koan {
   "Max aggregator" should "work" in {
     case class Max(v: Int)
     implicit val maxSg: Semigroup[Max] = (x, y) => Max(math.max(x.v, y.v))
-    val aggregator = ???
+    val aggregator = Aggregator[Int, Max, Int](Max(_))(_.v)
     testAggregator(Seq(1, 2, 3), 3)(aggregator)
   }
 
   "Distinct count aggregator" should "work" in {
     implicit val setSg: Semigroup[Set[Int]] = Semigroup(_ ++ _)
-    val aggregator = ???
+    val aggregator = Aggregator[Int, Set[Int], Int](Set(_))(_.size)
     testAggregator(Seq(1, 1, 1, 2, 2, 3), 3)(aggregator)
   }
 }

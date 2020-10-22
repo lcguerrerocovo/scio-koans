@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `foldByKey` with `aggregateByKey`.
  */
 class K15_AggregateByKey1 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = (SCollection[(String, Int)], SCollection[(String, Int)], SCollection[(String, Int)])
@@ -50,10 +49,10 @@ class K15_AggregateByKey1 extends TransformKoan {
 
     // FIXME: implement these with `aggregateByKey`
     // Hint: Algebird also provides `MaxAggregator`.
-    val max: SCollection[(String, Int)] = ???
+    val max: SCollection[(String, Int)] = input.aggregateByKey(Aggregator.max[Int])
 
     val distinctCountAggregator: Aggregator[Int, Set[Int], Int] = Aggregator.uniqueCount[Int]
-    val distinctCount: SCollection[(String, Int)] = ???
+    val distinctCount: SCollection[(String, Int)] = input.aggregateByKey(distinctCountAggregator)
 
     (min, max, distinctCount)
   }

@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `foldByKey` with `aggregateByKey`.
  */
 class K16_AggregateByKey2 extends TransformKoan {
-  ImNotDone
 
   import K16_AggregateByKey2._
 
@@ -44,9 +43,9 @@ class K16_AggregateByKey2 extends TransformKoan {
   val sumA = Aggregator.fromMonoid[Int]
 
   // Lazy so the test class can be instantiated
-  lazy val minA: Aggregator[Int, _, Int] = ???
-  lazy val maxA: Aggregator[Int, _, Int] = ???
-  lazy val distinctCountA: Aggregator[Int, _, Int] = ???
+  lazy val minA: Aggregator[Int, _, Int] = Aggregator.min[Int]
+  lazy val maxA: Aggregator[Int, _, Int] = Aggregator.max[Int]
+  lazy val distinctCountA: Aggregator[Int, _, Int] = Aggregator.uniqueCount[Int]
 
   test("v1") { input =>
     // Joining aggregators
@@ -58,8 +57,7 @@ class K16_AggregateByKey2 extends TransformKoan {
         .join(distinctCountA)
         .andThenPresent {
           case ((((count, sum), min), max), distinctCount) =>
-            // FIXME: present results as `Stats`
-            ???
+            Stats(count, sum, min, max, distinctCount)
         }
     input.aggregateByKey(multiAggregator)
   }
@@ -68,9 +66,8 @@ class K16_AggregateByKey2 extends TransformKoan {
     // Compose from multiple aggregators
     val multiAggregator: Aggregator[Int, _, Stats] =
       MultiAggregator(countA, sumA, minA, maxA, distinctCountA)
-        .andThenPresent { c =>
-          // FIXME: present `c` as `Stats`
-          ???
+        .andThenPresent { case (count,sum,min,max,distinctCount) =>
+          Stats(count, sum, min, max, distinctCount)
         }
     input.aggregateByKey(multiAggregator)
   }
