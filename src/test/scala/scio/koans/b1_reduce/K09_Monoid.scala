@@ -6,7 +6,6 @@ import scio.koans.shared._
  * Abstract reduce binary operations with `Monoid`s.
  */
 class K09_Monoid extends Koan {
-  ImNotDone
 
   import K09_Monoid._
 
@@ -32,13 +31,13 @@ class K09_Monoid extends Koan {
 
   "Max monoid" should "work" in {
     case class Max(v: Int)
-    implicit val maxMon: Monoid[Max] = ???
+    implicit val maxMon: Monoid[Max] = Monoid(Max(Int.MaxValue))((x, y) => Max(math.max(x.v,y.v)))
     testCombine(Max(1), Max(2), Max(2))
     testCombineAll(Seq(Max(1), Max(2), Max(3)), Max(3))
   }
 
   "Set monoid" should "work" in {
-    implicit val setMon: Monoid[Set[Int]] = Monoid(???)(???)
+    implicit val setMon: Monoid[Set[Int]] = Monoid(Set.empty[Int])((x,y) => x ++ y)
     testCombine(Set(1), Set(2), Set(1, 2))
     testCombineAll(Seq(Set(1), Set(2), Set(3)), Set(1, 2, 3))
   }

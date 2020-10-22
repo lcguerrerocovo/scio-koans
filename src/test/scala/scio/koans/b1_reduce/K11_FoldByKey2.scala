@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `reduceByKey` with `foldByKey`.
  */
 class K11_FoldByKey2 extends TransformKoan {
-  ImNotDone
 
   import K11_FoldByKey2._
 
@@ -45,8 +44,16 @@ class K11_FoldByKey2 extends TransformKoan {
   // Hint: Algebird provides implicit `Monoid[T]` for `T = Int, Min[Int], Max[Int], Set[Int]`
   // And can derive one for tuples e.g. `Monoid[(Int, Int, Min[Int], Max[Int], Set[Int])]`
   test("v1") {
-    _.mapValues(v => ?:[(Int, Int, Min[Int], Max[Int], Set[Int])]).foldByKey
-      .mapValues(v => ?:[Stats])
+    _.mapValues(v => (1,v,Min(v),Max(v), Set(v))).foldByKey
+      .mapValues { case (count, sum, min, max, set) =>
+        Stats(
+          count = count,
+          sum = sum,
+          min = min.get,
+          max = max.get,
+          distinctCount = set.size
+        )
+      }
   }
 }
 

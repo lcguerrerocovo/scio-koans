@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `reduceByKey` with `foldByKey`.
  */
 class K10_FoldByKey1 extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = (SCollection[(String, Int)], SCollection[(String, Int)], SCollection[(String, Int)])
@@ -50,8 +49,14 @@ class K10_FoldByKey1 extends TransformKoan {
 
     // FIXME: implement these with `foldByKey`
     // Hint: Algebird also provides implicit `Monoid[Max[Int]]` and `Monoid[Set[Int]]`
-    val max: SCollection[(String, Int)] = ???
-    val distinctCount: SCollection[(String, Int)] = ???
+    val max: SCollection[(String, Int)]
+    = input.mapValues(Max(_))
+        .foldByKey
+        .mapValues(_.get)
+    val distinctCount: SCollection[(String, Int)]
+    = input.mapValues(Set(_))
+      .foldByKey
+      .mapValues(_.size)
 
     (min, max, distinctCount)
   }
