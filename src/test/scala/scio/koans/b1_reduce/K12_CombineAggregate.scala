@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Replace `foldByKey` with `combineByKey` or `aggregateByKey`.
  */
 class K12_CombineAggregate extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = (SCollection[(String, Int)], SCollection[(String, Int)], SCollection[(String, Int)])
@@ -45,27 +44,22 @@ class K12_CombineAggregate extends TransformKoan {
   }
 
   test("combineByKey") { input =>
-    val min = input.combineByKey(identity)(math.min)(math.min)
-    val max = ???
+    val min = input.combineByKey(identity)(math.min(_,_))(math.min(_,_))
+    val max = input.combineByKey(identity)(math.max(_,_))(math.max(_,_))
 
-    def createCombiner(x: Int): Set[Int] = ???
-    def mergeValue(c: Set[Int], x: Int): Set[Int] = ???
-    def mergeCombiners(x: Set[Int], y: Set[Int]): Set[Int] = ???
     val distinctCount = input
-      .combineByKey(createCombiner)(mergeValue)(mergeCombiners)
+      .combineByKey(Set(_))(_ + _)(_ ++ _)
       .mapValues(_.size)
 
     (min, max, distinctCount)
   }
 
   test("aggregateByKey") { input =>
-    val min = input.aggregateByKey(Int.MaxValue)(math.min, math.min)
-    val max = ???
+    val min = input.aggregateByKey(Int.MaxValue)(math.min(_,_), math.min(_,_))
+    val max = input.aggregateByKey(Int.MinValue)(math.max(_,_), math.max(_,_))
 
-    def seqOp(accum: Set[Int], v: Int): Set[Int] = ???
-    def combOp(x: Set[Int], y: Set[Int]): Set[Int] = ???
     val distinctCount = input
-      .aggregateByKey(Set.empty[Int])(seqOp, combOp)
+      .aggregateByKey(Set.empty[Int])(_ + _, _ ++ _)
       .mapValues(_.size)
 
     (min, max, distinctCount)

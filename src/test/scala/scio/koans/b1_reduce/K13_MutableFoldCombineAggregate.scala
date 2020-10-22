@@ -9,7 +9,6 @@ import scala.collection.mutable
  * Optimize `{fold,combine,aggregate}ByKey` with mutable collections.
  */
 class K13_MutableFoldCombineAggregate extends TransformKoan {
-  ImNotDone
 
   type InT = SCollection[(String, Int)]
   type OutT = SCollection[(String, Int)]
@@ -36,20 +35,28 @@ class K13_MutableFoldCombineAggregate extends TransformKoan {
 
   test("foldByKey") { input =>
     // Hint: mutate LHS instead of creating a new collection
-    def op(x: mutable.Set[Int], y: mutable.Set[Int]): mutable.Set[Int] = ???
-    input.mapValues(mutable.Set(_)).foldByKey(mutable.Set.empty)(op).mapValues(_.size)
+    input.mapValues(mutable.Set(_))
+      .foldByKey(mutable.Set.empty) {
+        (l,r) => l += r.head
+      }
+      .mapValues(_.size)
   }
 
   test("combineByKey") { input =>
-    def createCombiner(x: Int): mutable.Set[Int] = mutable.Set(x)
-    def mergeValue(c: mutable.Set[Int], x: Int): mutable.Set[Int] = ???
-    def mergeCombiners(x: mutable.Set[Int], y: mutable.Set[Int]): mutable.Set[Int] = ???
-    input.combineByKey(createCombiner)(mergeValue)(mergeCombiners).mapValues(_.size)
+    input.combineByKey(mutable.Set(_)) {
+      (acc,v) => acc += v
+    } {
+      (acc, vs) => vs.foreach(v => acc += v); acc
+    }.mapValues(_.size)
   }
 
   test("aggregateByKey") { input =>
     def seqOp(accum: mutable.Set[Int], v: Int): mutable.Set[Int] = ???
     def combOp(x: mutable.Set[Int], y: mutable.Set[Int]): mutable.Set[Int] = ???
-    input.aggregateByKey(mutable.Set.empty[Int])(seqOp, combOp).mapValues(_.size)
+    input.aggregateByKey(mutable.Set.empty[Int])(
+      (acc,v) => acc += v
+    , (acc, vs) => {vs.foreach(v => acc += v); acc}
+    )
+    .mapValues(_.size)
   }
 }
