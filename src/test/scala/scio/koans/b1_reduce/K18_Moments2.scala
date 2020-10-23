@@ -8,7 +8,6 @@ import scio.koans.shared._
  * Compute min, max, sum, count, mean, variance and standard deviation with Moments.
  */
 class K18_Moments2 extends TransformKoan {
-  ImNotDone
 
   import K18_Moments2._
 
@@ -69,7 +68,15 @@ class K18_Moments2 extends TransformKoan {
     _.map(x => (Min(x), Max(x), x, Moments(x))).sum
       .map {
         case (min, max, sum, m) =>
-          ?:[Stats]
+          Stats(
+            min = min.get,
+            max = max.get,
+            sum = sum,
+            count = m.count,
+            mean = m.mean,
+            variance = m.variance,
+            stddev = m.stddev
+          )
       }
   }
 
@@ -77,10 +84,25 @@ class K18_Moments2 extends TransformKoan {
     val min = Aggregator.min[Int]
     val max = Aggregator.max[Int]
     val sum = Aggregator.fromMonoid[Int]
-    val moments: Aggregator[Int, Moments, Moments] = ???
+    val moments: Aggregator[Int, Moments, Moments] = MomentsAggregator
+      .composePrepare((x: Int) => x.toDouble)
+      .andThenPresent(identity)
 
     // Compose from multiple aggregators
-    val multiAggregator: Aggregator[Int, _, Stats] = ???
+    val multiAggregator: Aggregator[Int, _, Stats] =
+      MultiAggregator(min, max, sum, moments)
+        .andThenPresent { case (min, max, sum, moments) =>
+          Stats(
+            min = min,
+            max = max,
+            sum = sum,
+            count = moments.count,
+            mean = moments.mean,
+            variance = moments.variance,
+            stddev = moments.stddev
+          )
+
+        }
 
     input.aggregate(multiAggregator)
   }
