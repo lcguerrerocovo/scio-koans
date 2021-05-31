@@ -41,6 +41,8 @@ object K02_LatLon1 {
   // 1 minute = 60 seconds
   // https://en.wikipedia.org/wiki/Decimal_degrees#Precision
   // Hint: `Double` encoding is not deterministic but `Int` is
+  case class LatLon(lat: Coordinate,lon: Coordinate)
+  case class Coordinate(degrees: Int, minutes: Int, seconds: Int)
 
   object LatLon {
     def toAngle(num : Double): Coordinate = {
@@ -62,7 +64,4 @@ object K02_LatLon1 {
     def apply(lat: Double,lon: Double) = new LatLon(toAngle(lat),toAngle(lon))
   }
 
-  case class Coordinate(degrees: Int, minutes: Int, seconds: Int)
-
-  case class LatLon(lat: Coordinate,lon: Coordinate)
 }
